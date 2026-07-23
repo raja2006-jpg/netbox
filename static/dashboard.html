@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NetBox</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --bg:#0b0f19;
+  --card:#141a2a;
+  --accent:#4f8cff;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* NAVBAR */
+.navbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(9, 12, 19, 0.382);
+  backdrop-filter:blur(10px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 24px;
+}
+.logo{
+  font-size:22px;
+  font-weight:700;
+  color:var(--accent);
+}
+.nav-right{
+  display:flex;
+  gap:16px;
+}
+.nav-right span{
+  cursor:pointer;
+}
+
+/* SEARCH */
+.search-box{
+  margin:30px;
+}
+.search-box input{
+  width:100%;
+  padding:14px 18px;
+  border-radius:12px;
+  border:none;
+  outline:none;
+  font-size:16px;
+  background:#0f172a;
+  color:white;
+}
+
+/* SECTION */
+.section{
+  padding:0 24px;
+}
+.section h3{
+  margin:24px 0 16px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:18px;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  border-radius:14px;
+  overflow:hidden;
+  transition:.25s;
+  cursor:pointer;
+}
+.card:hover{
+  transform:translateY(-6px);
+}
+.card img{
+  width:100%;
+  height:230px;
+  object-fit:cover;
+}
+.card .info{
+  padding:10px;
+}
+.card h4{
+  font-size:14px;
+  margin:0;
+}
+.card p{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+/* FOOTER SPACE */
+.spacer{height:40px}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">NETBOX</div>
+  <div class="nav-right">
+    <span>Home</span>
+    <span onclick="logout()" style="color:#ef4444">Logout</span>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-box">
+  <input
+    type="text"
+    placeholder="Search movies, Tamil, dubbed..."
+    oninput="searchMovie(this.value)"
+  >
+</div>
+
+<!-- MOVIES -->
+<div class="section">
+  <h3>🔥 Your Movies</h3>
+  <div class="grid" id="movies"></div>
+</div>
+
+<div class="spacer"></div>
+
+<script>
+/* LOGIN CHECK */
+if(localStorage.getItem("loggedIn") !== "true"){
+  location.href = "index.html";
+}
+
+/* TMDB CONFIG */
+const API_KEY = "29c33295ec70aaf2a5d32ba03f98f053";
+const IMG = "https://image.tmdb.org/t/p/w500";
+const grid = document.getElementById("movies");
+
+/* LOAD LATEST TAMIL MOVIES */
+async function loadLatest(){
+  try{
+    const res = await fetch(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_original_language=ta&sort_by=release_date.desc`
+    );
+    const data = await res.json();
+    render(data.results.slice(0,12));
+  }catch(e){
+    console.error("Movie load failed", e);
+    grid.innerHTML = `<p style="color: var(--muted); text-align: center;">Failed to load movies</p>`;
+  }
+}
+
+/* REALTIME SEARCH */
+let timer;
+function searchMovie(q){
+  clearTimeout(timer);
+  timer = setTimeout(async ()=>{
+    if(!q.trim()){
+      loadLatest();
+      return;
+    }
+    try{
+      const res = await fetch(
+        `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(q)}`
+      );
+      const data = await res.json();
+      render(data.results);
+    }catch(e){
+      console.error("Search failed", e);
+    }
+  }, 300);
+}
+
+/* RENDER MOVIES */
+function render(list){
+  grid.innerHTML = "";
+  list.forEach(m=>{
+    if(!m.poster_path) return;
+    const safeTitle = m.title.replace(/'/g, "\\'");
+    grid.innerHTML += `
+      <div class="card" onclick="openMovie('${safeTitle}')">
+        <img src="${IMG + m.poster_path}" alt="${m.title}">
+        <div class="info">
+          <h4>${m.title.length > 18 ? m.title.substring(0, 18) + '...' : m.title}</h4>
+          <p>${m.release_date ? m.release_date.substring(0, 4) : ''}</p>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* CLICK MOVIE */
+function openMovie(title){
+  location.href = `download.html?title=${encodeURIComponent(title)}`;
+}
+
+/* LOGOUT */
+function logout(){
+  localStorage.clear();
+  window.location.href = "index.html";
+}
+
+/* INIT */
+loadLatest();
+</script>
+
+</body>
+</html>

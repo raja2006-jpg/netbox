@@ -1,0 +1,118 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>raja E-commerce</title>
+</head>
+<body>
+    
+
+
+    <div class="login-box">
+    <h2>log in</h2>
+    <h5>Username or Email</h5>
+    <input type="text" id="user" placeholder="Username">
+    <h5>Password</h5>   
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p1>need a account?  <u id="create">create an account</u></p>
+    </div>
+       
+
+
+    <style>
+        body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url("https://wallpapers.com/images/featured/solid-blue-lhmns06nptr6mvy2.jpg");
+    background-size: cover;
+}
+.login-box {
+    width: 300px;
+    padding: 20px;
+    background:transparent;
+    backdrop-filter: blur(1.5px);
+    border-radius: 25px;
+    border-color: rgb(236, 222, 144);
+    box-shadow: 0 2px 6px rgba(196, 144, 66, 0.33);
+}
+.login-box input {
+    width: 95%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 15px;
+    border: 1px solid #f7c15c;
+    background-color: rgba(4, 39, 72, 0.182);
+    color: rgb(228, 207, 164);
+    font-size: medium;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.login-box button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #2557c3;
+    color: rgb(221, 188, 105);
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 35px;
+    margin-bottom: 25px;
+}
+ h5{
+    margin-right: px;
+    margin-bottom: 1px;
+    justify-content: center;
+    padding: 1%;
+    color: rgb(197, 128, 0);
+    font-size: 20px;
+ }
+ h2{
+    color: rgb(197, 128, 0);
+    font-size: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+ }
+ p1{
+    color: rgb(197, 128, 0);
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 1px;
+ }
+ .login-box button:hover{
+    background-color: #06266a;
+     color: orange;
+ }
+ #create{
+    cursor: pointer;
+ }
+   </style>
+
+
+
+   <script>
+  function login() {
+    let username = document.getElementById("user").value;
+    let password = document.getElementById("password").value;
+
+    console.log(username, password);
+
+    if (username === "rajasiddharth" && password === "2006") {
+        localStorage.setItem("loggedIn", "true");
+        window.location.href = "dashboard.html";
+    } else {
+        alert("Invalid Username or Password");
+    }
+}
+   </script>
+
+
+
+
+</body>
+</html>
+

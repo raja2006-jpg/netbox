@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NetBox - Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #4f8cff;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(79, 140, 255, 0.1);
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .admin-section {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Upload Form */
+        .upload-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.5);
+            color: var(--text);
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .file-upload {
+            border: 2px dashed #4f8cff;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .file-upload:hover {
+            background: rgba(79, 140, 255, 0.05);
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        .quality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .quality-item {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+        }
+        
+        .quality-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .remove-quality {
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+        }
+        
+        .add-quality {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, var(--accent), #3b82f6);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+            transition: transform 0.3s;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .upload-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Movie List */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .movie-card {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #334155;
+            transition: transform 0.3s;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .movie-info {
+            padding: 20px;
+        }
+        
+        .movie-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+        
+        .movie-meta {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .quality-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .quality-tag {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .movie-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            flex: 1;
+        }
+        
+        .edit-btn {
+            background: rgba(79, 140, 255, 0.1);
+            color: var(--accent);
+        }
+        
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            display: none;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #334155;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, var(--accent));
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            text-align: center;
+            color: var(--muted);
+        }
+        
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(79, 140, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid var(--accent);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="logo">NETBOX ADMIN</div>
+            <div class="nav-links">
+                <a href="/dashboard">User Dashboard</a>
+                <a href="#" onclick="logout()">Logout</a>
+            </div>
+        </div>
+        
+        <!-- Upload Section -->
+        <div class="admin-section">
+            <h2>🎬 Upload New Movie</h2>
+            
+            <div class="upload-form">
+                <!-- Basic Info -->
+                <div class="form-group">
+                    <label>Movie Title *</label>
+                    <input type="text" id="movieTitle" placeholder="Enter movie title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Release Year *</label>
+                    <input type="number" id="movieYear" min="1900" max="2030" value="2024" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="movieDescription" placeholder="Movie plot summary..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Poster URL</label>
+                    <input type="url" id="moviePoster" placeholder="https://image.tmdb.org/t/p/w500/poster.jpg">
+                </div>
+                
+                <div class="form-group">
+                    <label>Primary Language *</label>
+                    <select id="primaryLanguage">
+                        <option value="tamil">Tamil</option>
+                        <option value="hindi">Hindi</option>
+                        <option value="english">English</option>
+                        <option value="telugu">Telugu</option>
+                        <option value="malayalam">Malayalam</option>
+                        <option value="kannada">Kannada</option>
+                    </select>
+                </div>
+                
+                <!-- File Upload -->
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Movie File *</label>
+                    <div class="file-upload" onclick="document.getElementById('movieFile').click()">
+                        <div class="upload-icon">📁</div>
+                        <div id="fileName">Click to select movie file (MP4, AVI, MKV)</div>
+                        <input type="file" id="movieFile" accept=".mp4,.avi,.mkv,.mov,.webm">
+                    </div>
+                </div>
+                
+                <!-- Quality Options -->
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Quality Versions</label>
+                    <div class="quality-grid" id="qualityContainer">
+                        <!-- Quality items will be added here -->
+                    </div>
+                    <button type="button" class="add-quality" onclick="addQuality()">+ Add Another Quality</button>
+                </div>
+            </div>
+            
+            <!-- Upload Progress -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Uploading...</div>
+            </div>
+            
+            <button class="upload-btn" onclick="uploadMovie()" id="uploadButton">🚀 Upload Movie</button>
+        </div>
+        
+        <!-- Movie List -->
+        <div class="admin-section">
+            <h2>📚 Movie Library</h2>
+            <div class="movies-grid" id="moviesGrid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading movies...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Quality versions array
+        let qualities = [
+            { code: '720p', name: '720p HD', size: '1GB' }
+        ];
+        
+        // Initialize quality selector
+        function renderQualities() {
+            const container = document.getElementById('qualityContainer');
+            container.innerHTML = '';
+            
+            qualities.forEach((quality, index) => {
+                const div = document.createElement('div');
+                div.className = 'quality-item';
+                div.innerHTML = `
+                    <div class="quality-header">
+                        <strong>${quality.name}</strong>
+                        ${index > 0 ? '<button class="remove-quality" onclick="removeQuality(' + index + ')">×</button>' : ''}
+                    </div>
+                    <div style="font-size: 12px; color: var(--muted);">
+                        Code: ${quality.code}<br>
+                        Size: ${quality.size}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function addQuality() {
+            const code = prompt('Enter quality code (e.g., 480p, 1080p):', '480p');
+            if (!code) return;
+            
+            const name = prompt('Enter quality name (e.g., 480p SD, 1080p FHD):', `${code} ${code.includes('480') ? 'SD' : code.includes('720') ? 'HD' : 'FHD'}`);
+            if (!name) return;
+            
+            const size = prompt('Enter file size (e.g., 500MB, 1.5GB):', '500MB');
+            if (!size) return;
+            
+            qualities.push({ code, name, size });
+            renderQualities();
+        }
+        
+        function removeQuality(index) {
+            if (qualities.length > 1) {
+                qualities.splice(index, 1);
+                renderQualities();
+            } else {
+                alert('At least one quality is required');
+            }
+        }
+        
+        // File upload handling
+        document.getElementById('movieFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('fileName').innerHTML = 
+                    `<strong>${file.name}</strong><br>Size: ${(file.size / 1024 / 1024).toFixed(2)} MB<br>Type: ${file.type}`;
+            }
+        });
+        
+        // Upload movie function
+        async function uploadMovie() {
+            const title = document.getElementById('movieTitle').value;
+            const year = document.getElementById('movieYear').value;
+            const description = document.getElementById('movieDescription').value;
+            const poster = document.getElementById('moviePoster').value;
+            const language = document.getElementById('primaryLanguage').value;
+            const fileInput = document.getElementById('movieFile');
+            
+            // Validation
+            if (!title || title.trim() === '') {
+                alert('Movie title is required!');
+                return;
+            }
+            
+            if (!year || year < 1900 || year > 2030) {
+                alert('Please enter a valid year between 1900 and 2030');
+                return;
+            }
+            
+            if (!fileInput.files[0]) {
+                alert('Please select a movie file!');
+                return;
+            }
+            
+            // Check file size (max 2GB)
+            const fileSize = fileInput.files[0].size;
+            const maxSize = 2 * 1024 * 1024 * 1024; // 2GB
+            if (fileSize > maxSize) {
+                alert('File size too large! Maximum size is 2GB.');
+                return;
+            }
+            
+            // Show progress bar
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const uploadButton = document.getElementById('uploadButton');
+            
+            progressContainer.style.display = 'block';
+            uploadButton.disabled = true;
+            uploadButton.innerHTML = '⏳ Uploading...';
+            
+            try {
+                // Create FormData
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('year', year);
+                formData.append('description', description);
+                formData.append('poster', poster);
+                formData.append('language', language);
+                formData.append('qualities', JSON.stringify(qualities));
+                formData.append('file', fileInput.files[0]);
+                
+                // Real upload progress
+                const xhr = new XMLHttpRequest();
+                
+                xhr.upload.addEventListener('progress', function(e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = (e.loaded / e.total) * 100;
+                        progressFill.style.width = percentComplete + '%';
+                        progressText.textContent = `Uploading... ${Math.round(percentComplete)}%`;
+                    }
+                });
+                
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        const result = JSON.parse(xhr.responseText);
+                        
+                        if (result.success) {
+                            progressFill.style.width = '100%';
+                            progressText.innerHTML = '<span style="color:#10b981">✅ Upload successful!</span>';
+                            uploadButton.innerHTML = '🎉 Upload Complete!';
+                            
+                            // Reset form and reload movies
+                            setTimeout(() => {
+                                resetForm();
+                                progressContainer.style.display = 'none';
+                                uploadButton.disabled = false;
+                                uploadButton.innerHTML = '🚀 Upload Movie';
+                                loadMovies();
+                                alert(`Movie "${title}" uploaded successfully!\n\nDownload URL: ${result.download_url}`);
+                            }, 1500);
+                        } else {
+                            throw new Error(result.error || 'Upload failed');
+                        }
+                    } else {
+                        throw new Error(`Server error: ${xhr.status}`);
+                    }
+                };
+                
+                xhr.onerror = function() {
+                    throw new Error('Network error - check if server is running');
+                };
+                
+                xhr.open('POST', '/api/admin/upload');
+                xhr.send(formData);
+                
+            } catch (error) {
+                progressText.innerHTML = `<span style="color:#ef4444">❌ Error: ${error.message}</span>`;
+                uploadButton.disabled = false;
+                uploadButton.innerHTML = '🚀 Upload Movie';
+                
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        function resetForm() {
+            document.getElementById('movieTitle').value = '';
+            document.getElementById('movieYear').value = '2024';
+            document.getElementById('movieDescription').value = '';
+            document.getElementById('moviePoster').value = '';
+            document.getElementById('movieFile').value = '';
+            document.getElementById('fileName').innerHTML = 'Click to select movie file (MP4, AVI, MKV)';
+            qualities = [{ code: '720p', name: '720p HD', size: '1GB' }];
+            renderQualities();
+        }
+        
+        // Load movies from backend
+        async function loadMovies() {
+            const grid = document.getElementById('moviesGrid');
+            
+            try {
+                grid.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading movies...</p></div>';
+                
+                const response = await fetch('/api/admin/movies');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const movies = await response.json();
+                
+                if (movies.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: span 3; text-align: center; padding: 40px; color: var(--muted);">
+                            <div style="font-size: 48px; margin-bottom: 20px;">📭</div>
+                            <h3>No Movies Yet</h3>
+                            <p>Upload your first movie using the form above!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                grid.innerHTML = '';
+                
+                movies.forEach(movie => {
+                    const card = document.createElement('div');
+                    card.className = 'movie-card';
+                    card.innerHTML = `
+                        <img src="${movie.poster_url || movie.poster || 'https://via.placeholder.com/300x200/1e293b/94a3b8?text=No+Poster'}" 
+                             class="movie-poster" alt="${movie.title}"
+                             onerror="this.src='https://via.placeholder.com/300x200/1e293b/94a3b8?text=No+Poster'">
+                        <div class="movie-info">
+                            <div class="movie-title">${movie.title}</div>
+                            <div class="movie-meta">${movie.year} • ${movie.language || 'Unknown'}</div>
+                            <div class="quality-tags">
+                                ${Array.isArray(movie.qualities) ? 
+                                    movie.qualities.map(q => `<span class="quality-tag">${q.code || 'N/A'}</span>`).join('') : 
+                                    '<span class="quality-tag">No Qualities</span>'}
+                            </div>
+                            <div class="movie-actions">
+                                <button class="action-btn edit-btn" onclick="editMovie(${movie.id})">Edit</button>
+                                <button class="action-btn delete-btn" onclick="deleteMovie(${movie.id}, '${movie.title}')">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                
+            } catch (error) {
+                console.error('Failed to load movies:', error);
+                grid.innerHTML = `
+                    <div style="grid-column: span 3; text-align: center; padding: 40px; color: #ef4444;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                        <h3>Error Loading Movies</h3>
+                        <p>${error.message}</p>
+                        <button onclick="loadMovies()" style="margin-top: 20px; padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        function editMovie(id) {
+            alert(`Edit feature coming soon for movie ID: ${id}`);
+            // To be implemented: Open edit modal with movie data
+        }
+        
+        async function deleteMovie(id, title) {
+            if (confirm(`Are you sure you want to delete "${title}"?\n\nThis action cannot be undone!`)) {
+                try {
+                    const response = await fetch(`/api/admin/movies/${id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        alert(`✅ "${title}" deleted successfully!`);
+                        loadMovies(); // Reload list
+                    } else {
+                        throw new Error(result.error || 'Delete failed');
+                    }
+                } catch (error) {
+                    alert(`❌ Delete failed: ${error.message}`);
+                }
+            }
+        }
+        
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/';
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQualities();
+            loadMovies();
+            
+            // Test API connection
+            fetch('/api/health')
+                .then(response => response.json())
+                .then(data => console.log('API Health:', data))
+                .catch(err => console.warn('API not responding:', err));
+        });
+    </script>
+</body>
+</html>

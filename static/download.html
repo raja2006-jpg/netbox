@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NetBox | Download</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --bg:#0b0f19;
+  --card:#141a2a;
+  --accent:#4f8cff;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* NAVBAR */
+.navbar{
+  position:sticky;
+  top:0;
+  background:rgba(11,15,25,.9);
+  backdrop-filter:blur(10px);
+  display:flex;
+  justify-content:space-between;
+  padding:16px 24px;
+}
+.logo{
+  font-size:22px;
+  font-weight:700;
+  color:var(--accent);
+  cursor:pointer;
+}
+
+/* MAIN */
+.container{
+  padding:24px;
+  max-width:1100px;
+  margin:auto;
+}
+
+/* MOVIE CARD */
+.movie-box{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:24px;
+  background:var(--card);
+  padding:20px;
+  border-radius:18px;
+}
+
+.poster{
+  width:100%;
+  border-radius:14px;
+}
+
+.movie-info h1{
+  margin:0;
+  font-size:26px;
+}
+.movie-info p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* ACTIONS */
+.actions{
+  margin-top:20px;
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.btn{
+  padding:12px 18px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  font-size:15px;
+  transition:all 0.3s ease;
+}
+.btn-primary{
+  background:var(--accent);
+  color:white;
+}
+.btn-dark{
+  background:#0f172a;
+  color:white;
+}
+.btn-success{
+  background:#10b981;
+  color:white;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* QUICK DOWNLOAD SECTION */
+.quick-download{
+  background:#0f172a;
+  padding:20px;
+  border-radius:12px;
+  margin-top:20px;
+  border:1px solid #1e293b;
+}
+.quick-download-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
+}
+.quick-download-header h4{
+  margin:0;
+  color:#10b981;
+}
+
+/* LANGUAGE & QUALITY SELECTORS */
+.selector-group{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:15px;
+  margin-top:15px;
+  align-items:end;
+}
+.selector-box{
+  background:#1e293b;
+  padding:15px;
+  border-radius:10px;
+}
+.selector-label{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:8px;
+  display:block;
+}
+
+.language-selector {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.lang-btn {
+  background:#0f172a;
+  border:1px solid #374151;
+  color:var(--text);
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
+  transition:all 0.2s;
+}
+.lang-btn.active {
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+.quality-selector {
+  display:flex;
+  gap:8px;
+}
+.quality-btn {
+  background:#0f172a;
+  border:1px solid #374151;
+  color:var(--text);
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
+  transition:all 0.2s;
+}
+.quality-btn.active {
+  background:#10b981;
+  border-color:#10b981;
+}
+
+.download-now-btn{
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  border:none;
+  padding:12px 24px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:14px;
+  white-space:nowrap;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* SOURCES */
+.sources{
+  margin-top:30px;
+}
+.source{
+  background:#0f172a;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.source span{
+  color:var(--muted);
+}
+
+/* DOWNLOAD CARD */
+.download-card {
+  background:#0f172a;
+  padding:20px;
+  border-radius:12px;
+  margin-top:20px;
+  border-left:4px solid var(--accent);
+}
+.download-info {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+.download-size {
+  color:#9ca3af;
+  font-size:14px;
+}
+.download-btn {
+  background:#10b981;
+  color:white;
+  border:none;
+  padding:12px 30px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:16px;
+  width:100%;
+  margin-top:15px;
+}
+
+/* SEARCH STATUS */
+.search-status {
+  background:#1e293b;
+  padding:20px;
+  border-radius:10px;
+  margin:20px 0;
+}
+.status-item {
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin:12px 0;
+  padding:10px;
+  background:rgba(255,255,255,0.03);
+  border-radius:8px;
+}
+.status-icon {
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+}
+.status-icon.searching {
+  background:#f59e0b;
+  animation:pulse 1.5s infinite;
+}
+.status-icon.found {
+  background:#10b981;
+}
+.status-icon.error {
+  background:#ef4444;
+}
+.status-text {
+  flex:1;
+  font-size:14px;
+}
+.status-link {
+  color:#4f8cff;
+  text-decoration:none;
+  font-size:12px;
+  padding:4px 12px;
+  border-radius:6px;
+  background:rgba(79,140,255,0.1);
+}
+
+/* DIRECT DOWNLOAD MODAL */
+.direct-download-modal{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(11,15,25,0.95);
+  backdrop-filter:blur(10px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+}
+.modal-content{
+  background:var(--card);
+  padding:30px;
+  border-radius:15px;
+  max-width:500px;
+  width:90%;
+  max-height:80vh;
+  overflow-y:auto;
+}
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.modal-header h3{
+  margin:0;
+  color:#10b981;
+}
+.close-modal{
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-size:24px;
+  cursor:pointer;
+  padding:0;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.close-modal:hover{
+  background:rgba(255,255,255,0.1);
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* ANIMATIONS */
+@keyframes spin {
+  0% { transform:rotate(0deg); }
+  100% { transform:rotate(360deg); }
+}
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@keyframes pulse {
+  0% { opacity:0.6; }
+  50% { opacity:1; }
+  100% { opacity:0.6; }
+}
+.fade-in {
+  animation:fadeIn 0.3s ease-out;
+}
+.spin{
+  animation:spin 1s linear infinite;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+  <div class="logo" onclick="goHome()">NETBOX</div>
+  <div>AI Movie Downloader</div>
+</div>
+
+<div class="container">
+
+  <div class="movie-box">
+    <img id="poster" class="poster" src="" alt="Poster">
+
+    <div class="movie-info">
+      <h1 id="title">Loading...</h1>
+      <div id="movieMeta" style="color: var(--muted); margin-bottom: 10px;">
+        <span id="year"></span> • <span id="rating"></span> • <span id="runtime"></span>
+      </div>
+      <p id="overview">
+        NetBox AI is analyzing the movie and collecting available sources.
+      </p>
+
+      <div class="actions">
+        <button class="btn btn-primary" onclick="watchTrailer()">▶ Watch Trailer</button>
+        <button class="btn btn-dark" onclick="saveToWatchlist()">⭐ Save to Watchlist</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK DOWNLOAD SECTION -->
+  <div class="quick-download">
+    <div class="quick-download-header">
+      <span style="font-size:24px;">🤖</span>
+      <h4>AI Download Finder</h4>
+    </div>
+    <p style="color:var(--muted); font-size:14px; margin-bottom:15px;">
+      Select your preferred language and quality, then click "Download Now" for AI to find the best download link.
+    </p>
+    
+    <div class="selector-group">
+      <div class="selector-box">
+        <label class="selector-label">Language:</label>
+        <div class="language-selector" id="languageSelector">
+          <!-- Languages will be added by JavaScript -->
+        </div>
+      </div>
+      
+      <div class="selector-box">
+        <label class="selector-label">Quality:</label>
+        <div class="quality-selector" id="qualitySelector">
+          <!-- Qualities will be added by JavaScript -->
+        </div>
+      </div>
+      
+      <button class="download-now-btn" id="aiDownloadBtn" onclick="startAIDownload()">
+        <span>🚀</span> Download Now
+      </button>
+    </div>
+    
+    <div style="margin-top:15px; font-size:12px; color:#9ca3af; padding:10px; background:rgba(79,140,255,0.1); border-radius:8px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span>⚡</span>
+        <span>AI will search 15+ websites to find the best download link for your selection.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sources" id="sourcesContainer">
+    <h3>📥 Available Sources</h3>
+    <div id="sourcesContent">
+      <p>Select language and quality above to start searching...</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- DIRECT DOWNLOAD MODAL -->
+<div class="direct-download-modal" id="directDownloadModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>🎬 Direct Download Available</h3>
+      <button class="close-modal" onclick="closeDirectDownload()">&times;</button>
+    </div>
+    
+    <div id="modalContent">
+      <!-- Content will be filled dynamically -->
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  © 2025 NetBox • AI powered movie downloader
+</div>
+
+  <script>
+/* LOGIN CHECK */
+if(localStorage.getItem("loggedIn") !== "true"){
+  location.href="/";
+}
+
+/* READ MOVIE NAME */
+const params = new URLSearchParams(location.search);
+const movieTitle = params.get("title");
+
+/* TMDB */
+const API_KEY = "29c33295ec70aaf2a5d32ba03f98f053";
+const IMG = "https://image.tmdb.org/t/p/w500";
+
+/* State */
+let currentMovie = null;
+let selectedLanguage = 'tamil';
+let selectedQuality = '720p';
+
+/* AVAILABLE LANGUAGES */
+const availableLanguages = [
+  { code: 'tamil', name: 'Tamil', icon: '🎭' },
+  { code: 'hindi', name: 'Hindi', icon: '🎬' },
+  { code: 'english', name: 'English', icon: '🎥' },
+  { code: 'telugu', name: 'Telugu', icon: '🌟' },
+  { code: 'malayalam', name: 'Malayalam', icon: '🎞️' },
+  { code: 'kannada', name: 'Kannada', icon: '✨' }
+];
+
+/* AVAILABLE QUALITIES */
+const availableQualities = [
+  { code: '480p', name: '480p SD', size: '500MB-800MB' },
+  { code: '720p', name: '720p HD', size: '1GB-1.5GB' },
+  { code: '1080p', name: '1080p FHD', size: '2GB-3GB' },
+  { code: '2160p', name: '4K UHD', size: '4GB-8GB' }
+];
+
+/* SAMPLE MOVIES FOR TESTING */
+const sampleMovies = {
+  'sample': {
+    title: 'Sample Video',
+    year: 2023,
+    type: 'demo',
+    downloads: {
+      '480p': 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      '720p': 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+    }
+  },
+  'test': {
+    title: 'Test Video',
+    year: 2023,
+    type: 'demo',
+    downloads: {
+      '480p': 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+      '720p': 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'
+    }
+  }
+};
+
+/* CHECK IF SAMPLE MOVIE */
+function isSampleMovie(movieName) {
+  const lowerName = movieName.toLowerCase();
+  for (const [key, movie] of Object.entries(sampleMovies)) {
+    if (lowerName.includes(key)) {
+      return movie;
+    }
+  }
+  return null;
+}
+
+/* ==================== INITIALIZE PAGE ==================== */
+async function initializePage() {
+  if (!movieTitle) {
+    document.getElementById("title").innerText = "No movie selected";
+    return;
+  }
+
+  document.getElementById("title").innerText = movieTitle;
+  currentMovie = movieTitle;
+  
+  // Initialize language selector
+  const langSelector = document.getElementById('languageSelector');
+  langSelector.innerHTML = '';
+  availableLanguages.forEach(lang => {
+    const btn = document.createElement('button');
+    btn.className = `lang-btn ${lang.code === selectedLanguage ? 'active' : ''}`;
+    btn.innerHTML = `${lang.icon} ${lang.name}`;
+    btn.onclick = () => selectLanguage(lang.code);
+    langSelector.appendChild(btn);
+  });
+  
+  // Initialize quality selector
+  const qualSelector = document.getElementById('qualitySelector');
+  qualSelector.innerHTML = '';
+  availableQualities.forEach(qual => {
+    const btn = document.createElement('button');
+    btn.className = `quality-btn ${qual.code === selectedQuality ? 'active' : ''}`;
+    btn.innerHTML = qual.name;
+    btn.onclick = () => selectQuality(qual.code);
+    qualSelector.appendChild(btn);
+  });
+  
+  // Load movie details from TMDB
+  await loadMovieDetails();
+  
+  // Show initial interface
+  displaySearchInterface();
+}
+
+/* LOAD MOVIE DETAILS FROM TMDB */
+async function loadMovieDetails() {
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(currentMovie)}`
+    );
+    const data = await res.json();
+    const tmdbMovie = data.results[0];
+
+    if (tmdbMovie) {
+      document.getElementById("title").innerText = tmdbMovie.title || currentMovie;
+      document.getElementById("overview").innerText = 
+        tmdbMovie.overview || "Description not available.";
+      document.getElementById("year").innerText = tmdbMovie.release_date?.substring(0, 4) || 'N/A';
+      document.getElementById("rating").innerText = tmdbMovie.vote_average ? 
+        tmdbMovie.vote_average.toFixed(1) + '/10' : 'N/A';
+      document.getElementById("runtime").innerText = '120-180 min';
+      
+      if (tmdbMovie.poster_path) {
+        document.getElementById("poster").src = IMG + tmdbMovie.poster_path;
+      }
+    }
+  } catch (error) {
+    console.error("TMDB error:", error);
+  }
+}
+
+/* ==================== MAIN DOWNLOAD FUNCTION ==================== */
+async function startAIDownload() {
+  // Check if sample movie first
+  const sampleMovie = isSampleMovie(currentMovie);
+  if (sampleMovie) {
+    showDirectDownload(sampleMovie);
+    return;
+  }
+  
+  const sourcesSection = document.getElementById("sourcesContent");
+  
+  // Show searching status
+  sourcesSection.innerHTML = `
+    <div style="background:#0f172a; padding:30px; border-radius:12px; text-align:center;">
+      <div class="ai-loader" style="display:inline-block; width:60px; height:60px; border:3px solid #10b981; border-radius:50%; border-top-color:transparent; animation:spin 1s linear infinite; margin:20px;"></div>
+      <h4 style="color:#10b981;">🔍 Searching Our Database</h4>
+      <p style="color:var(--muted); margin:15px 0;">
+        Searching for "<strong>${currentMovie}</strong>"<br>
+        Language: <strong>${selectedLanguage}</strong> • Quality: <strong>${selectedQuality}</strong>
+      </p>
+    </div>
+  `;
+  
+  try {
+    // ====== CRITICAL CHANGE: Call YOUR Flask API ======
+    const apiUrl = `/api/search?title=${encodeURIComponent(currentMovie)}&lang=${selectedLanguage}&quality=${selectedQuality}`;
+    
+    console.log("Calling API:", apiUrl);
+    
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    
+    if (data.available) {
+      // Movie found in database
+      showDirectDownloadFromAPI(data);
+    } else {
+      // Movie not found
+      showMovieNotFound(data.message || "Movie not found in our database");
+    }
+    
+  } catch (error) {
+    console.error("API Error:", error);
+    showAPIError();
+  }
+}
+
+/* SHOW DIRECT DOWNLOAD FROM API RESPONSE */
+function showDirectDownloadFromAPI(data) {
+  const modal = document.getElementById('directDownloadModal');
+  const modalContent = document.getElementById('modalContent');
+  
+  modalContent.innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-size:40px; color:#10b981; margin-bottom:15px;">🎬</div>
+      <h4 style="margin-bottom:10px;">Download Ready!</h4>
+      <p style="color:var(--muted); margin-bottom:20px;">
+        <strong>${data.movie.title}</strong> (${data.movie.year || ''})<br>
+        ${data.movie.quality} • ${data.movie.language || selectedLanguage} • ${data.movie.size || '1.2GB'}
+      </p>
+      
+      <div style="background:rgba(16,185,129,0.1); padding:15px; border-radius:10px; margin-bottom:20px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="color:#10b981; font-size:20px;">✅</span>
+          <span>Direct download available from our server</span>
+        </div>
+        <div style="font-size:13px; color:#10b981;">
+          Click the button below to start downloading
+        </div>
+      </div>
+      
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:20px;">
+        <div style="text-align:left; background:rgba(255,255,255,0.05); padding:15px; border-radius:8px;">
+          <div style="font-size:12px; color:#9ca3af;">File Name</div>
+          <div>${data.movie.title.replace(/[^a-z0-9]/gi, '-')}-${selectedQuality}.mp4</div>
+        </div>
+        <div style="text-align:left; background:rgba(255,255,255,0.05); padding:15px; border-radius:8px;">
+          <div style="font-size:12px; color:#9ca3af;">File Size</div>
+          <div>${data.movie.size || '1.2GB'}</div>
+        </div>
+      </div>
+      
+      <button class="download-btn" onclick="startRealDownload('${data.download_link}', '${data.movie.title}')" style="margin-bottom:15px;">
+        ⏬ DOWNLOAD NOW
+      </button>
+      
+      <button class="btn btn-dark" onclick="closeDirectDownload()" style="width:100%;">
+        Cancel
+      </button>
+    </div>
+  `;
+  
+  modal.style.display = 'flex';
+}
+
+/* SHOW MOVIE NOT FOUND */
+function showMovieNotFound(message) {
+  const sourcesSection = document.getElementById("sourcesContent");
+  
+  sourcesSection.innerHTML = `
+    <div style="background:#0f172a; padding:30px; border-radius:12px; text-align:center;">
+      <div style="font-size:40px; margin-bottom:20px;">📭</div>
+      <h4>Movie Not in Database</h4>
+      <p style="color:var(--muted); margin-bottom:20px;">
+        "${currentMovie}" is not currently available in our library.
+      </p>
+      
+      ${message ? `<p style="color:#f59e0b; margin-bottom:20px;">${message}</p>` : ''}
+      
+      <div style="background:rgba(245,158,11,0.1); padding:20px; border-radius:10px; margin:20px 0;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="color:#f59e0b; font-size:20px;">💡</span>
+          <strong style="color:#f59e0b;">Suggestions:</strong>
+        </div>
+        <div style="text-align:left; font-size:13px; color:var(--muted);">
+          1. Try searching for a different movie<br>
+          2. Check sample movies: <button onclick="location.href='download.html?title=sample'" style="background:none; border:none; color:#4f8cff; cursor:pointer; padding:0;">"sample"</button> or <button onclick="location.href='download.html?title=test'" style="background:none; border:none; color:#4f8cff; cursor:pointer; padding:0;">"test"</button><br>
+          3. Try different language or quality<br>
+          4. Check back later as we add more movies
+        </div>
+      </div>
+      
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:10px; margin-top:20px;">
+        <button class="btn btn-dark" onclick="searchOnGoogle()">
+          🔍 Google Search
+        </button>
+        <button class="btn btn-dark" onclick="searchOnYouTube()">
+          ▶️ YouTube Search
+        </button>
+        <button class="btn btn-dark" onclick="location.href='download.html?title=sample'">
+          🧪 Test Download
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+/* SHOW API ERROR */
+function showAPIError() {
+  const sourcesSection = document.getElementById("sourcesContent");
+  
+  sourcesSection.innerHTML = `
+    <div style="background:#0f172a; padding:30px; border-radius:12px; text-align:center;">
+      <div style="font-size:40px; margin-bottom:20px;">⚠️</div>
+      <h4 style="color:#f59e0b;">Connection Error</h4>
+      <p style="color:var(--muted); margin-bottom:20px;">
+        Could not connect to our search server.
+      </p>
+      
+      <div style="background:rgba(239,68,68,0.1); padding:20px; border-radius:10px; margin:20px 0;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="color:#ef4444; font-size:20px;">🔧</span>
+          <strong style="color:#ef4444;">Troubleshooting:</strong>
+        </div>
+        <div style="text-align:left; font-size:13px; color:var(--muted);">
+          1. Make sure Flask server is running (python app.py)<br>
+          2. Check if API is accessible: <a href="/api/test" target="_blank" style="color:#4f8cff;">/api/test</a><br>
+          3. Try refreshing the page<br>
+          4. Use sample movies for testing
+        </div>
+      </div>
+      
+      <button class="btn btn-primary" onclick="startAIDownload()">
+        🔄 Try Again
+      </button>
+    </div>
+  `;
+}
+
+/* SHOW DIRECT DOWNLOAD FOR SAMPLE MOVIES */
+function showDirectDownload(movie) {
+  const modal = document.getElementById('directDownloadModal');
+  const modalContent = document.getElementById('modalContent');
+  
+  const downloadUrl = movie.downloads[selectedQuality] || movie.downloads['720p'];
+  
+  modalContent.innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-size:40px; color:#10b981; margin-bottom:15px;">🎬</div>
+      <h4 style="margin-bottom:10px;">Sample Download Ready!</h4>
+      <p style="color:var(--muted); margin-bottom:20px;">
+        ${movie.title} • ${selectedQuality.toUpperCase()}
+      </p>
+      
+      <div style="background:rgba(16,185,129,0.1); padding:15px; border-radius:10px; margin-bottom:20px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <span style="color:#10b981; font-size:20px;">✅</span>
+          <span>This is a real working download link</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="color:#10b981; font-size:20px;">⚡</span>
+          <span>Click below to start test download</span>
+        </div>
+      </div>
+      
+      <button class="download-btn" onclick="startRealDownload('${downloadUrl}', '${movie.title}')" style="margin-bottom:15px;">
+        ⏬ DOWNLOAD SAMPLE
+      </button>
+      
+      <div style="font-size:12px; color:#9ca3af;">
+        Note: This is a sample video for testing.<br>
+        Real movies will show similar download interface.
+      </div>
+    </div>
+  `;
+  
+  modal.style.display = 'flex';
+}
+
+/* CLOSE DIRECT DOWNLOAD MODAL */
+function closeDirectDownload() {
+  document.getElementById('directDownloadModal').style.display = 'none';
+}
+
+/* START REAL DOWNLOAD */
+function startRealDownload(url, title) {
+  // Create download link
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${title.replace(/[^a-z0-9]/gi, '-')}-${selectedQuality}.mp4`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  
+  // Show success message
+  setTimeout(() => {
+    alert(`✅ Download started for "${title}"!\nCheck your downloads folder.`);
+    closeDirectDownload();
+  }, 500);
+}
+
+/* DISPLAY SEARCH INTERFACE */
+function displaySearchInterface() {
+  const sourcesSection = document.getElementById("sourcesContent");
+  
+  sourcesSection.innerHTML = `
+    <p>Select language and quality above, then click "Download Now" to search our database.</p>
+    
+    <div style="background:rgba(79,140,255,0.1); padding:15px; border-radius:10px; margin-top:15px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <span style="color:#4f8cff;">🤖</span>
+        <strong>How It Works:</strong>
+      </div>
+      <div style="font-size:13px; color:var(--muted);">
+        1. Searches our movie database for exact match<br>
+        2. Checks for selected language and quality<br>
+        3. Returns direct download link if available<br>
+        4. For testing, try "sample" or "test" movies
+      </div>
+    </div>
+    
+    <div style="margin-top:20px;">
+      <div style="font-size:14px; color:var(--muted); margin-bottom:10px;">Test Movies:</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-dark" onclick="location.href='download.html?title=sample'">
+          🧪 Sample Video
+        </button>
+        <button class="btn btn-dark" onclick="location.href='download.html?title=test'">
+          🔧 Test Video
+        </button>
+        <button class="btn btn-dark" onclick="location.href='download.html?title=demo'">
+          🎬 Demo Movie
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+/* SELECT LANGUAGE */
+function selectLanguage(lang) {
+  selectedLanguage = lang;
+  
+  // Update active state
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+}
+
+/* SELECT QUALITY */
+function selectQuality(quality) {
+  selectedQuality = quality;
+  
+  // Update active state
+  document.querySelectorAll('.quality-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+}
+
+/* HELPER FUNCTIONS */
+function searchOnGoogle() {
+  window.open(`https://www.google.com/search?q=${encodeURIComponent(currentMovie + " download")}`, '_blank');
+}
+
+function searchOnYouTube() {
+  window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(currentMovie + " full movie")}`, '_blank');
+}
+
+function watchTrailer() {
+  window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(currentMovie)}+official+trailer`, '_blank');
+}
+
+function saveToWatchlist() {
+  const watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
+  if (!watchlist.some(item => item.title === currentMovie)) {
+    watchlist.push({
+      title: currentMovie,
+      date: new Date().toISOString()
+    });
+    localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    alert(`"${currentMovie}" added to your watchlist!`);
+  } else {
+    alert(`"${currentMovie}" is already in your watchlist.`);
+  }
+}
+
+function goHome() {
+  location.href = "/dashboard";
+}
+
+// Initialize the page
+initializePage();
+</script>
+
+
+</body>
+</html>
